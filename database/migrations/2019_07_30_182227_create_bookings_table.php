@@ -21,8 +21,8 @@ class CreateBookingsTable extends Migration
             $table->date('check-out_date');
             $table->string('status');
             $table->float('day_price');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('dog_id');
+            $table->foreign('dog_id')->references('id')->on('dogs');
             $table->timestamps();
         });
     }

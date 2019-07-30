@@ -16,8 +16,8 @@ class Booking extends Model
         return $this->belongsToMany('App\Service');
     }
 
-    public function user()
+    public function dog()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Dog');
     }
 }
