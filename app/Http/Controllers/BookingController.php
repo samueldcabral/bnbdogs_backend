@@ -15,6 +15,8 @@ class BookingController extends Controller
     public function index()
     {
         //
+        $booking = Booking::all();
+        return view('booking.index', compact('booking'));
     }
 
     /**
@@ -25,6 +27,7 @@ class BookingController extends Controller
     public function create()
     {
         //
+        return view('booking.create');
     }
 
     /**
@@ -36,6 +39,17 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         //
+        $validatedData = $request->validate([
+            'booking_date' => 'required|max:255',
+            'check-in_date' => 'required',
+            'check-out_date' => 'required',
+            'day_price' => 'required'
+        ]);
+
+        Booking::create($validatedData);
+
+        return redirect(route('booking.index'))->with('success', 'booking is successfully created');
+    
     }
 
     /**
@@ -47,6 +61,8 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         //
+        $booking = Booking::findOrFail($booking->id);
+        return view('booking.show', compact('booking'));
     }
 
     /**
@@ -58,6 +74,8 @@ class BookingController extends Controller
     public function edit(Booking $booking)
     {
         //
+        $booking = Booking::findOrFail($booking->id);
+        return view('booking.edit', compact('booking'));
     }
 
     /**
@@ -70,6 +88,17 @@ class BookingController extends Controller
     public function update(Request $request, Booking $booking)
     {
         //
+        $validatedData = $request->validate([
+            'booking_date' => 'required|max:255',
+            'check-in_date' => 'required',
+            'check-out_date' => 'required',
+            'day_price' => 'required'
+        ]);
+
+        Booking::whereId($booking->id)->update($validatedData);
+
+        return redirect(route('booking.index'))->with('success', 'booking is successfully updated');
+    
     }
 
     /**
@@ -81,5 +110,10 @@ class BookingController extends Controller
     public function destroy(Booking $booking)
     {
         //
+        $booking = Booking::findOrFail($booking->id);
+        $booking->delete();
+
+        return redirect(route('booking.index'))->with('success', 'booking is successfully deleted');;
+    
     }
 }

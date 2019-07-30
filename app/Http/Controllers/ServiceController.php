@@ -15,6 +15,8 @@ class ServiceController extends Controller
     public function index()
     {
         //
+        $service = Service::all();
+        return view('service.index', compact('service'));
     }
 
     /**
@@ -25,6 +27,7 @@ class ServiceController extends Controller
     public function create()
     {
         //
+        return view('service.create');
     }
 
     /**
@@ -36,6 +39,14 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'price' => 'required',
+        ]);
+
+        Service::create($validatedData);
+
+        return redirect(route('service.index'))->with('success', 'Service is successfully created');
     }
 
     /**
@@ -47,6 +58,8 @@ class ServiceController extends Controller
     public function show(Service $service)
     {
         //
+        $service = Service::findOrFail($service->id);
+        return view('service.show', compact('service'));
     }
 
     /**
@@ -58,6 +71,8 @@ class ServiceController extends Controller
     public function edit(Service $service)
     {
         //
+        $service = Service::findOrFail($service->id);
+        return view('service.edit', compact('service'));
     }
 
     /**
@@ -70,6 +85,14 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'price' => 'required',
+        ]);
+
+        Service::whereId($service->id)->update($validatedData);
+
+        return redirect(route('service.index'))->with('success', 'Service is successfully updated');
     }
 
     /**
@@ -81,5 +104,9 @@ class ServiceController extends Controller
     public function destroy(Service $service)
     {
         //
+        $service = Service::findOrFail($service->id);
+        $service->delete();
+
+        return redirect(route('service.index'))->with('success', 'service is successfully deleted');;
     }
 }

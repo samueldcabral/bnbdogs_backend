@@ -15,6 +15,8 @@ class UserController extends Controller
     public function index()
     {
         //
+        $user = User::all();
+        return view('user.index', compact('user'));
     }
 
     /**
@@ -22,10 +24,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function create()
-    // {
-    //     //
-    // }
+
+    public function create()
+    {
+        //
+        return view('user.create');
+
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,7 +40,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return view('user.store');
     }
 
     /**
@@ -47,6 +52,8 @@ class UserController extends Controller
     public function show(User $user)
     {
         //
+        $user = User::findOrFail($user->id);
+        return view('user.show', compact('user'));
     }
 
     /**
@@ -58,6 +65,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
+        $user = User::findOrFail($user->id);
+        return view('user.edit', compact('user'));
     }
 
     /**
@@ -70,6 +79,14 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email',
+        ]);
+        
+        User::whereId($user->id)->update($validatedData);
+
+        return redirect(route('user.index'))->with('success', 'User is successfully saved');
     }
 
     /**
@@ -81,5 +98,9 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+        $user = User::findOrFail($user->id);
+        $user->delete();
+
+        return redirect(route('user.index'))->with('success', 'User is successfully deleted');;
     }
 }
