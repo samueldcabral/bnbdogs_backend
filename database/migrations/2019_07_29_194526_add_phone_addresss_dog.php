@@ -15,9 +15,9 @@ class AddPhoneAddresssDog extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('type');
-            $table->string('phone');
-            $table->string('address');
+            $table->string('type')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
         });
     }
 
