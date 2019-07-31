@@ -22,7 +22,7 @@ class CreateBookingsTable extends Migration
             $table->string('status');
             $table->float('day_price');
             $table->unsignedBigInteger('dog_id');
-            $table->foreign('dog_id')->references('id')->on('dogs');
+            $table->foreign('dog_id')->references('id')->on('dogs')->onDelete('cascade');
             $table->timestamps();
         });
     }
