@@ -16,9 +16,9 @@ class CreateBookingServiceTable extends Migration
         Schema::create('booking_service', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('booking_id');
-            $table->foreign('booking_id')->references('id')->on('bookings');
+            $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade');
             $table->unsignedBigInteger('service_id');
-            $table->foreign('service_id')->references('id')->on('services');
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
             $table->timestamps();
         });
     }
