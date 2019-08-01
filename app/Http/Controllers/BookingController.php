@@ -15,8 +15,7 @@ class BookingController extends Controller
     public function index()
     {
         //
-        $booking = Booking::all();
-        return view('booking.index', compact('booking'));
+        return Booking::all();
     }
 
     /**
@@ -48,8 +47,8 @@ class BookingController extends Controller
 
         Booking::create($validatedData);
 
-        return redirect(route('booking.index'))->with('success', 'booking is successfully created');
-    
+        // return redirect(route('booking.index'))->with('success', 'booking is successfully created');
+        return 'Booking is successfully created';
     }
 
     /**
@@ -62,7 +61,10 @@ class BookingController extends Controller
     {
         //
         $booking = Booking::findOrFail($booking->id);
-        return view('booking.show', compact('booking'));
+        // return view('booking.show', compact('booking'));
+        
+        // return Booking::findOrFail($booking->id);
+        return $booking;
     }
 
     /**
