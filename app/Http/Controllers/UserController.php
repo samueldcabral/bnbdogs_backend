@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -14,9 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
-        $user = User::all();
-        return view('user.index', compact('user'));
+        return User::all();
     }
 
     /**
@@ -27,7 +27,6 @@ class UserController extends Controller
 
     public function create()
     {
-        //
         return view('user.create');
 
     }
@@ -40,7 +39,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        return view('user.store');
+        $validatedData = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+            
+        if ($validatedData->fails()) {
+            return response()
+            ->json(['message' => 'Validation failed'], 403);
+        } else {
+            User::create([
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'password' => Hash::make($request['password']),
+            ]);
+            return response()
+            ->json(['message' => 'User created'], 201);
+        }
     }
 
     /**
@@ -51,9 +67,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
         $user = User::findOrFail($user->id);
-        return view('user.show', compact('user'));
+        return $user;
     }
 
     /**
@@ -64,7 +79,6 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
         $user = User::findOrFail($user->id);
         return view('user.edit', compact('user'));
     }
@@ -78,15 +92,19 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
-        $validatedData = $request->validate([
+        $validatedData = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'email' => 'required|email',
         ]);
         
-        User::whereId($user->id)->update($validatedData);
-
-        return redirect(route('user.index'))->with('success', 'User is successfully saved');
+        if ($validatedData->fails()) {
+            return response()
+            ->json(['message' => 'Validation failed'], 403);
+        } else {
+            User::whereId($user->id)->update($request->all());
+            return response()
+            ->json(['message' => 'User updated'], 200);
+        }
     }
 
     /**
@@ -101,6 +119,7 @@ class UserController extends Controller
         $user = User::findOrFail($user->id);
         $user->delete();
 
-        return redirect(route('user.index'))->with('success', 'User is successfully deleted');;
+        // return redirect(route('user.index'))->with('success', 'User is successfully deleted');;
+        return response()->json(['message' => 'User deleted'], 200);
     }
 }

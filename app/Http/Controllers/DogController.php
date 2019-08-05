@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Dog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class DogController extends Controller64
+class DogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +15,7 @@ class DogController extends Controller64
      */
     public function index()
     {
-        //
-        $dog = Dog::all();
-        return view('dog.index', compact('dog'));
+        return Dog::all();
     }
 
     /**
@@ -26,7 +25,6 @@ class DogController extends Controller64
      */
     public function create()
     {
-        //
         return view('dog.create');
     }
 
@@ -38,14 +36,19 @@ class DogController extends Controller64
      */
     public function store(Request $request)
     {
-        //
-        $validatedData = $request->validate([
+        $validatedData = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'weight' => 'required',
         ]);
-        Dog::create($validatedData);
 
-        return redirect(route('dog.index'))->with('success', 'Dog is successfully created');
+        if ($validatedData->fails()) {
+            return response()
+            ->json(['message' => 'Validation failed'], 403);
+        } else {
+            Dog::create($request->all());
+            return response()
+            ->json(['message' => 'Dog created'], 201);
+        }
     }
 
     /**
@@ -56,9 +59,8 @@ class DogController extends Controller64
      */
     public function show(Dog $dog)
     {
-        //
         $dog = Dog::findOrFail($dog->id);
-        return view('dog.show', compact('dog'));
+        return $dog;
     }
 
     /**
@@ -69,7 +71,6 @@ class DogController extends Controller64
      */
     public function edit(Dog $dog)
     {
-        //
         $dog = Dog::findOrFail($dog->id);
         return view('dog.edit', compact('dog'));
     }
@@ -83,15 +84,19 @@ class DogController extends Controller64
      */
     public function update(Request $request, Dog $dog)
     {
-        //
-        $validatedData = $request->validate([
+        $validatedData = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'weight' => 'required',
         ]);
-        
-        Dog::whereId($dog->id)->update($validatedData);
 
-        return redirect(route('dog.index'))->with('success', 'Dog is successfully saved');
+        if ($validatedData->fails()) {
+            return response()
+            ->json(['message' => 'Validation failed'], 403);
+        } else {
+            Dog::whereId($dog->id)->update($request->all());
+            return response()
+            ->json(['message' => 'Dog created'], 200);
+        }
     }
 
     /**
@@ -102,11 +107,9 @@ class DogController extends Controller64
      */
     public function destroy(Dog $dog)
     {
-        //
         $dog = Dog::findOrFail($dog->id);
         $dog->delete();
 
-        return redirect(route('dog.index'))->with('success', 'dog is successfully deleted');;
-    
+        return response()->json(['message' => 'Dog deleted'], 200);
     }
 }

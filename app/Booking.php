@@ -8,7 +8,7 @@ class Booking extends Model
 {
     //
     protected $fillable = [
-        'booking_date', 'duration', 'check-in_date', 'check-out_date', 'status', 'day_price'
+        'booking_date', 'duration', 'check-in_date', 'check-out_date', 'status', 'day_price', 'dog_id'
     ];
 
     public function services()

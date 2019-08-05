@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
 {
@@ -14,7 +15,6 @@ class BookingController extends Controller
      */
     public function index()
     {
-        //
         return Booking::all();
     }
 
@@ -37,18 +37,20 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $validatedData = $request->validate([
-            'booking_date' => 'required|max:255',
-            'check-in_date' => 'required',
-            'check-out_date' => 'required',
+        $validatedData = Validator::make($request->all(), [
+            'booking_date' => 'required',
             'day_price' => 'required'
         ]);
 
-        Booking::create($validatedData);
-
-        // return redirect(route('booking.index'))->with('success', 'booking is successfully created');
-        return 'Booking is successfully created';
+        if ($validatedData->fails()) {
+            return $validatedData->messages()->first();
+            // return response()
+            // ->json(['message' => 'Validation failed'], 403);
+        } else {
+            Booking::create($request->all());
+            return response()
+            ->json(['message' => 'Booking created'], 201);
+        }
     }
 
     /**
@@ -59,11 +61,7 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        //
         $booking = Booking::findOrFail($booking->id);
-        // return view('booking.show', compact('booking'));
-        
-        // return Booking::findOrFail($booking->id);
         return $booking;
     }
 
@@ -89,18 +87,20 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
-        //
-        $validatedData = $request->validate([
+        $validatedData = Validator::make($request->all(), [
             'booking_date' => 'required|max:255',
-            'check-in_date' => 'required',
-            'check-out_date' => 'required',
             'day_price' => 'required'
         ]);
+        
+        if ($validatedData->fails()) {
+            return response()
+            ->json(['message' => 'Validation failed'], 403);
+        } else {
+            Booking::whereId($booking->id)->update($request->all());
+            return response()
+            ->json(['message' => 'Booking updated'], 200);
+        }
 
-        Booking::whereId($booking->id)->update($validatedData);
-
-        return redirect(route('booking.index'))->with('success', 'booking is successfully updated');
-    
     }
 
     /**
@@ -115,7 +115,6 @@ class BookingController extends Controller
         $booking = Booking::findOrFail($booking->id);
         $booking->delete();
 
-        return redirect(route('booking.index'))->with('success', 'booking is successfully deleted');;
-    
+        return response()->json(['message' => 'Booking deleted'], 200);
     }
 }

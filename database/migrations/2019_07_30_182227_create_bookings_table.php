@@ -15,11 +15,11 @@ class CreateBookingsTable extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('booking_date');
-            $table->integer('duration');
-            $table->date('check-in_date');
-            $table->date('check-out_date');
-            $table->string('status');
+            $table->date('booking_date');
+            $table->integer('duration')->nullable();
+            $table->date('check-in_date')->nullable();
+            $table->date('check-out_date')->nullable();
+            $table->string('status')->default('pending');
             $table->float('day_price');
             $table->unsignedBigInteger('dog_id');
             $table->foreign('dog_id')->references('id')->on('dogs')->onDelete('cascade');

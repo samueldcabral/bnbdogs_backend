@@ -18,6 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('booking', 'BookingController');
+Route::resource('dog', 'DogController');
+Route::resource('user', 'UserController');
+Route::resource('service', 'ServiceController');
+
 
 Route::fallback(function(){
     return response()->json(['message' => 'Route Forbidden.'], 403);
