@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Booking;
+use App\Service;
+use App\BookingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -100,7 +102,6 @@ class BookingController extends Controller
             return response()
             ->json(['message' => 'Booking updated'], 200);
         }
-
     }
 
     /**
@@ -111,10 +112,24 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking)
     {
-        //
         $booking = Booking::findOrFail($booking->id);
         $booking->delete();
 
         return response()->json(['message' => 'Booking deleted'], 200);
+    }
+
+    public function addservice(Request $request, Booking $booking) 
+    {
+        $booking = Booking::findOrFail($booking->id);
+        $service = Service::findOrFail($request['service_id']);
+        
+    
+        BookingService::create([
+            'booking_id' => $booking->id,
+            'service_id' => $service->id
+        ]);
+
+        return response()
+        ->json(['message' => 'Service added to Booking'], 200);
     }
 }

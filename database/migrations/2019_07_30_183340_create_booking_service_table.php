@@ -13,7 +13,7 @@ class CreateBookingServiceTable extends Migration
      */
     public function up()
     {
-        Schema::create('booking_service', function (Blueprint $table) {
+        Schema::create('booking_services', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('booking_id');
             $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade');
