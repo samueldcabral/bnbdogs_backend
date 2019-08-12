@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Booking;
 use App\Service;
+use App\User;
+use App\Dog;
 use App\BookingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -131,5 +133,30 @@ class BookingController extends Controller
 
         return response()
         ->json(['message' => 'Service added to Booking'], 200);
+    }
+
+    public function findBookingByUser(User $user)
+    {
+        $user = User::findOrFail($user->id);
+        
+        $dogs = Dog::all();
+        $userDogs = [];
+        foreach ($dogs as $dog) {
+            if ($dog->user_id === $user->id)
+                $userDogs[] = $dog;
+        }
+
+        $bookings = Booking::all();
+        $userBookings = [];
+
+        foreach ($userDogs as $dog) {
+            foreach ($bookings as $booking) {
+                if ($dog->id === $booking->dog_id)
+                    $userBookings[] = $booking;
+            }
+        }
+
+        return $userBookings ? $userBookings : 'Not Found';
+
     }
 }

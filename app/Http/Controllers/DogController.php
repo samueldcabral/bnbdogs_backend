@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dog;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -111,5 +112,17 @@ class DogController extends Controller
         $dog->delete();
 
         return response()->json(['message' => 'Dog deleted'], 200);
+    }
+
+    public function findDogByUser(User $user)
+    {
+        $user = User::findOrFail($user->id);
+        $dogs = Dog::all();
+        $userDogs = [];
+        foreach ($dogs as $dog) {
+            if ($dog->user_id === $user->id)
+                $userDogs[] = $dog;
+        }
+        return $userDogs ? $userDogs : 'Not Found';
     }
 }

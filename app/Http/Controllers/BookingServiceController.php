@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BookingService;
+use App\Booking;
 use Illuminate\Http\Request;
 
 class BookingServiceController extends Controller
@@ -81,5 +82,17 @@ class BookingServiceController extends Controller
     public function destroy(BookingService $bookingService)
     {
         //
+    }
+
+    public function findBookingServicesByUser(Booking $booking)
+    {
+        $booking = Booking::findOrFail($booking->id);
+        $bookingServices = BookingService::all();
+        $bookings = [];
+        foreach ($bookingServices as $bs) {
+            if ($bs->booking_id === $booking->id)
+                $bookings[] = $bs;
+        }
+        return $bookings ? $bookings : 'Not Found';
     }
 }
