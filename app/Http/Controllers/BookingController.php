@@ -138,15 +138,10 @@ class BookingController extends Controller
     public function findBookingByUser(User $user)
     {
         $user = User::findOrFail($user->id);
-        
-        $dogs = Dog::all();
-        $userDogs = [];
-        foreach ($dogs as $dog) {
-            if ($dog->user_id === $user->id)
-                $userDogs[] = $dog;
-        }
+        $userDogs = Dog::all()
+            ->where('user_id', $user->id);
 
-        $bookings = Booking::all();
+              $bookings = Booking::all();
         $userBookings = [];
 
         foreach ($userDogs as $dog) {
@@ -154,7 +149,7 @@ class BookingController extends Controller
                 if ($dog->id === $booking->dog_id)
                     $userBookings[] = $booking;
             }
-        }
+        } 
 
         return $userBookings ? $userBookings : 'Not Found';
 

@@ -87,12 +87,16 @@ class BookingServiceController extends Controller
     public function findBookingServicesByUser(Booking $booking)
     {
         $booking = Booking::findOrFail($booking->id);
-        $bookingServices = BookingService::all();
+
+        $bookings = BookingService::all()
+            -> where('booking_id', $booking->id);
+
+        /* $bookingServices = BookingService::all();
         $bookings = [];
         foreach ($bookingServices as $bs) {
             if ($bs->booking_id === $booking->id)
                 $bookings[] = $bs;
-        }
+        } */
         return $bookings ? $bookings : 'Not Found';
     }
 }
