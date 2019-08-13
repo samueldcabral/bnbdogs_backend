@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -122,4 +123,22 @@ class UserController extends Controller
         // return redirect(route('user.index'))->with('success', 'User is successfully deleted');;
         return response()->json(['message' => 'User deleted'], 200);
     }
+
+    public function login(Request $request)
+        {
+            $status = 401;
+            $response = ['error' => 'Unauthorised'];
+
+            if (Auth::attempt($request->only(['email', 'password']))) {
+                $status = 200;
+                $response = [
+                    'user' => Auth::user(),
+                    // 'token' => Auth::user()->createToken('bigStore')->accessToken,
+                ];
+            }
+
+            return response()->json($response, $status);
+        }
+
+
 }
