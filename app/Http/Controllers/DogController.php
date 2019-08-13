@@ -96,7 +96,7 @@ class DogController extends Controller
         } else {
             Dog::whereId($dog->id)->update($request->all());
             return response()
-            ->json(['message' => 'Dog created'], 200);
+            ->json(['message' => 'Dog updated'], 200);
         }
     }
 
@@ -117,12 +117,13 @@ class DogController extends Controller
     public function findDogByUser(User $user)
     {
         $user = User::findOrFail($user->id);
-        $dogs = Dog::all();
-        $userDogs = [];
-        foreach ($dogs as $dog) {
-            if ($dog->user_id === $user->id)
-                $userDogs[] = $dog;
-        }
+        
+        $userDogs = Dog::all()
+            ->where('user_id', $user->id);
+       
         return $userDogs ? $userDogs : 'Not Found';
     }
+
+/*     public function findDogByName($dogName)
+ */
 }
