@@ -47,7 +47,7 @@ class UserController extends Controller
             
         if ($validatedData->fails()) {
             return response()
-            ->json(['message' => 'Validation failed'], 403);
+            ->json(['message' => 'Validation failed', 'error'=>$validatedData->messages()->first()], 403);
         } else {
             User::create([
                 'name' => $request['name'],

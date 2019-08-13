@@ -18,7 +18,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Booking::class, function (Faker $faker) {
     return [
-        'booking_date' => $faker->name,
+        'booking_date' => $faker->dateTime(),
         'duration' => $faker->randomDigit,
         'check-in_date' => $faker->dateTimeBetween($startDate = '-10 days', $endDate = 'now', $timezone = null),
         'check-out_date' => $faker->dateTimeBetween($startDate = 'now', $endDate = '+5 days', $timezone = null),
