@@ -24,6 +24,7 @@ Route::resource('user', 'UserController');
 Route::resource('service', 'ServiceController');
 Route::resource('bookingservice', 'BookingServiceController');
 Route::post('booking/{booking}', 'BookingController@addservice');
+Route::post('login', 'UserController@login');
 
 Route::get('dogs/{user}', 'DogController@findDogByUser');
 Route::get('bookings/{user}', 'BookingController@findBookingByUser');
