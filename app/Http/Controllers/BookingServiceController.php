@@ -84,7 +84,7 @@ class BookingServiceController extends Controller
         //
     }
 
-    public function findBookingServicesByUser(Booking $booking)
+    public function findBookingServicesByBooking(Booking $booking)
     {
         $booking = Booking::findOrFail($booking->id);
 

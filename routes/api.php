@@ -27,7 +27,8 @@ Route::post('booking/{booking}', 'BookingController@addservice');
 
 Route::get('dogs/{user}', 'DogController@findDogByUser');
 Route::get('bookings/{user}', 'BookingController@findBookingByUser');
-Route::get('bookingservice/{booking}', 'BookingServiceController@findBookingServicesByUser');
+Route::get('bookingsservices/{booking}', 'BookingServiceController@findBookingServicesByBooking');
+Route::get('dog/{dog}/name', 'DogController@findDogNameById');
 
 Route::fallback(function(){
     return response()->json(['message' => 'Route Forbidden.'], 403);
