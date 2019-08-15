@@ -18,15 +18,15 @@ class BookingTest extends TestCase
      */
     public function test_can_create_booking()
     {
-        // $faker = Faker::makeFaker();
 
         $data = [
-            'booking_date' => strval($this->faker->date($format = 'Y-m-d', $max = 'now')),
-            'day_price' => strval($this->faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 100)),  
+            'booking_date' => '2019-08-14',
+            'day_price' => 40.0,  
+            'dog_id' => 1
         ];
-        print_r($data);
-        $this->post(route('booking.store'), $data)
-        ->assertStatus(201);
+
+        $response = $this->json('POST', '/api/booking', $data);
+        $response->assertStatus(201);
 
 
     }

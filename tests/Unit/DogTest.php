@@ -26,21 +26,9 @@ class DogTest extends TestCase
 
     public function test_can_create_dog()
     {
-        // $faker = Faker::makeFaker();
-
-        $data = [
-            'name' => $this->faker->name,
-            'weight' => $this->faker->name,  
-        ];
-
-        print_r($data);
-
-        // $this->post(route('dog.store'), $data)
-        // ->assertStatus(201);
-        $response = $this->call('POST', 'api/dog', ['name' => $this->faker->name, 'weight' => $this->faker->numberBetween($min = 1, $max = 100)]);
-        // $response = $this->json('POST', 'api/dog', ['name' => $this->faker->name, 'weight' => $this->faker->numberBetween($min = 1, $max = 100)]);
+        $response = $this->json('POST', 'api/dog', ['name' => 'Lucas', 'age' => '2', 'weight' => '5', 'user_id' => 1]);
         $response
-        ->assertStatus(201);
+            ->assertStatus(201);
     }
 
 }
