@@ -124,11 +124,4 @@ class DogController extends Controller
         return $userDogs ? $userDogs : 'Not Found';
     }
 
-    public function findDogNameById(Dog $dog) 
-    {
-        $name = Dog::all()
-            ->where('id', $dog->id)->first()->value('name');
-        return $name;
-    }
-
 }
